@@ -14,47 +14,47 @@ A single tweet object.
 
 This also contains a TJUser which contains information about the user who posted the tweet.
 */
-public class TJTweet {
+open class TJTweet {
     
     /**
     The user who the tweet belongs to
     */
-    public var user: TJUser!
+    open var user: TJUser!
     
     /**
     The main 140 characters text of the tweet
     */
-    public var text: String!
+    open var text: String!
     
     /**
     The ID of the tweet
     */
-    public var id: Int!
+    open var id: Int!
     
     /**
     How many times the tweet has been favorited
     */
-    public var favoriteCount: Int!
+    open var favoriteCount: Int!
     
     /**
     How many times the tweet has been retweeted
     */
-    public var retweetCount: Int!
+    open var retweetCount: Int!
     
     /**
     Array of hashtags in the tweet
     */
-    public var hashtags: [String] = []
+    open var hashtags: [String] = []
     
     /**
     Array of urls in the tweet
     */
-    public var urls: [String] = []
+    open var urls: [String] = []
     
     /**
     Array of users mentioned in the tweet
     */
-    public var userMentions: [String] = []
+    open var userMentions: [String] = []
     
     /**
     Initilize with a json object.

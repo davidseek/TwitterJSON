@@ -19,7 +19,7 @@ extension TwitterJSON {
     :param: String Username of the user whos followers to retrive.
     :param: Completion Containts an array of TJTweet objects.
     */
-    public class func getFollowersForUser(userName: String, completion: (users: [TJUser]) -> Void) {
+    public class func getFollowersForUser(_ userName: String, completion: @escaping (_ users: [TJUser]) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/followers/list.json"
         let parameters = [
             "screen_name": userName,
@@ -32,9 +32,9 @@ extension TwitterJSON {
                 users.append(user)
             }
             TwitterJSON.loadImages(nil, users: users, completion: { (tweets, users) -> Void in
-                dispatch_async(dispatch_get_main_queue(),{
-                    completion(users: users!)
-                })
+                DispatchQueue.main.async {
+                    completion(users!)
+                }
             })
         }
     }
@@ -45,7 +45,7 @@ extension TwitterJSON {
     :param: String Username of the user whos followers you want to retrieve.
     :param: Completion Containts an array of TJTweet objects.
     */
-    public class func getFollowingForUser(userName: String, completion: (users: [TJUser]) -> Void) {
+    public class func getFollowingForUser(_ userName: String, completion: @escaping (_ users: [TJUser]) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/friends/list.json"
         let parameters = [
             "screen_name": userName,
@@ -58,9 +58,9 @@ extension TwitterJSON {
                 users.append(user)
             }
             TwitterJSON.loadImages(nil, users: users, completion: { (tweets, users) -> Void in
-                dispatch_async(dispatch_get_main_queue(),{
-                    completion(users: users!)
-                })
+                DispatchQueue.main.async {
+                    completion( users!)
+                }
             })
         }
     }

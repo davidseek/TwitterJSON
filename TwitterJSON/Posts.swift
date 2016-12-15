@@ -19,11 +19,11 @@ public extension TwitterJSON {
     :param: Int The ID of the tweet to retweet.
     :param: Completion Contains a sussess bool. Success will be true if the user has already retweeted the tweet.
     */
-    public class func retweet(tweetID: Int, completion: (success: Bool) -> Void) {
+    public class func retweet(_ tweetID: Int, completion: @escaping (_ success: Bool) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/statuses/retweet/\(tweetID).json"
         TwitterJSON.makeRequest(.POST, parameters: nil, apiURL: apiURL) { success, _ in
-            dispatch_async(dispatch_get_main_queue(),{
-                completion(success: success)
+            DispatchQueue.main.async(execute: {
+                completion(success)
             })
         }
     }
@@ -34,11 +34,11 @@ public extension TwitterJSON {
     :param: Int The ID of the tweet to retweet.
     :param: Completion Contains a sussess bool. Success will be true if the user has already retweeted the tweet.
     */
-    public class func favoriteTweet(tweetID: Int, completion: (success: Bool) -> Void) {
+    public class func favoriteTweet(_ tweetID: Int, completion: @escaping (_ success: Bool) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/favorites/create.json?id=\(tweetID)"
         TwitterJSON.makeRequest(.POST, parameters: nil, apiURL: apiURL) { success, _ in
-            dispatch_async(dispatch_get_main_queue(),{
-                completion(success: success)
+            DispatchQueue.main.async(execute: {
+                completion(success)
             })
         }
     }
@@ -49,14 +49,14 @@ public extension TwitterJSON {
     :param: String Text to post.
     :param: Completion Contains a sussess bool.
     */
-    public class func postTweet(text: String, completion: (success: Bool) -> Void) {
+    public class func postTweet(_ text: String, completion: @escaping (_ success: Bool) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/statuses/update.json"
         let parameters = [
-            "status" : text.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            "status" : text.replacingPercentEscapes(using: String.Encoding.utf8)!
         ]
         TwitterJSON.makeRequest(.POST, parameters: parameters, apiURL: apiURL) { success, _ in
-            dispatch_async(dispatch_get_main_queue(),{
-                completion(success: success)
+            DispatchQueue.main.async(execute: {
+                completion(success)
             })
         }
     }

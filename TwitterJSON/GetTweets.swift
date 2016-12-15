@@ -19,7 +19,7 @@ extension TwitterJSON {
     :param: String The search term to query.
     :param: Completion Containts an array of TJTweet objects.
     */
-    public class func searchForTweets(query: String, completion: (tweets: [TJTweet]) -> Void) {
+    public class func searchForTweets(_ query: String, completion: @escaping (_ tweets: [TJTweet]) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/search/tweets.json"
         let parameters = [
             "q" : query,
@@ -32,9 +32,9 @@ extension TwitterJSON {
                 tweets.append(tweet)
             }
             TwitterJSON.loadImages(tweets, users: nil, completion: { (tweets, users) -> Void in
-                dispatch_async(dispatch_get_main_queue(),{
-                    completion(tweets: tweets!)
-                })
+                DispatchQueue.main.async {
+                    completion(tweets!)
+                }
             })
         }
     }
@@ -44,7 +44,7 @@ extension TwitterJSON {
     
     :param: Completion Containts an array of TJTweet objects.
     */
-    public class func getHomeFeed(completion: (tweets: [TJTweet]) -> Void) {
+    public class func getHomeFeed(_ completion: @escaping (_ tweets: [TJTweet]) -> Void) {
         let apiURL = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let parameters = [
             "count": "\(TwitterJSON.numberOfResults)"
@@ -56,9 +56,9 @@ extension TwitterJSON {
                 tweets.append(tweet)
             }
             TwitterJSON.loadImages(tweets, users: nil, completion: { (tweets, users) -> Void in
-                dispatch_async(dispatch_get_main_queue(),{
-                    completion(tweets: tweets!)
-                })
+                DispatchQueue.main.async {
+                    completion(tweets!)
+                }
             })
         }
     }

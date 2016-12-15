@@ -14,57 +14,57 @@ A single user object.
 
 Contains information related to a single user.
 */
-public class TJUser {
+open class TJUser {
     
     /**
     The full name of the user
     */
-    public var name: String!
+    open var name: String!
     
     /**
     The screen name of the user
     */
-    public var screenName: String!
+    open var screenName: String!
     
     /**
     User bio/description
     */
-    public var description: String!
+    open var description: String!
     
     /**
     How many followers the user has
     */
-    public var followersCount: Int!
+    open var followersCount: Int!
     
     /**
     Use this to check if a user has a profile image. Defaults to false
     */
-    public var hasProfileImage = false
+    open var hasProfileImage = false
     
     /**
     If the user has a profile image this will hold the url to the image
     */
-    public var profileImageURL: String!
+    open var profileImageURL: String!
     
     /**
     If the user has a profile image this will load the image into a UIImage
     */
-    public var profileImage: UIImage!
+    open var profileImage: UIImage!
     
     /**
     Profile banner image Url
     */
-    public var profileBannerURL: String!
+    open var profileBannerURL: String!
     
     /**
     How many people the user is followiung
     */
-    public var followingCount: Int!
+    open var followingCount: Int!
     
     /**
     Total number of tweets by the user
     */
-    public var totalTweets: Int!
+    open var totalTweets: Int!
     
     
     /**

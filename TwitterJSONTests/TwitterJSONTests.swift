@@ -18,92 +18,92 @@ class TwitterJSONTests: XCTestCase {
     }
     
     func testGetHomeFeed() {
-        let expectation = expectationWithDescription("Test Get Home Feed")
+        let expectation = self.expectation(description: "Test Get Home Feed")
         
         TwitterJSON.getHomeFeed { (tweets) -> Void in
             XCTAssertEqual(tweets.count, TwitterJSON.numberOfResults)
             expectation.fulfill()
         }
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testRetweet() {
-        let expectation = expectationWithDescription("Test Retweet")
+        let expectation = self.expectation(description: "Test Retweet")
         
         TwitterJSON.retweet(632158353607802880, completion: { (success) -> Void in
             XCTAssertTrue(success)
             expectation.fulfill()
         })
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testFavorite() {
-        let expectation = expectationWithDescription("Test Favorite")
+        let expectation = self.expectation(description: "Test Favorite")
         
         TwitterJSON.favoriteTweet(632158353607802880, completion: { (success) -> Void in
             XCTAssertTrue(success)
             expectation.fulfill()
         })
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testPostTweet() {
-        let expectation = expectationWithDescription("Test Post Tweet")
+        let expectation = self.expectation(description: "Test Post Tweet")
         
         TwitterJSON.postTweet("Posted from running test in my project...", completion: { (success) -> Void in
             XCTAssertTrue(success)
             expectation.fulfill()
         })
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testSearchForTweets() {
-        let expectation = expectationWithDescription("Test Search Tweets")
+        let expectation = self.expectation(description: "Test Search Tweets")
         
         TwitterJSON.searchForTweets("Apple") { (tweets) -> Void in
             XCTAssertEqual(tweets.count, TwitterJSON.numberOfResults)
             expectation.fulfill()
         }
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testGetUserFollowers() {
-        let expectation = expectationWithDescription("Test User Followers")
+        let expectation = self.expectation(description: "Test User Followers")
         
         TwitterJSON.getFollowersForUser("KyleGoslan", completion: { (users) -> Void in
             XCTAssertEqual(users.count, TwitterJSON.numberOfResults)
             expectation.fulfill()
         })
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }
     
     func testGetFollowing() {
-        let expectation = expectationWithDescription("Get Following")
+        let expectation = self.expectation(description: "Get Following")
         
         TwitterJSON.getFollowingForUser("KyleGoslan", completion: { (users) -> Void in
             XCTAssertEqual(users.count, TwitterJSON.numberOfResults)
             expectation.fulfill()
         })
         
-        waitForExpectationsWithTimeout(5, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error")
         })
     }

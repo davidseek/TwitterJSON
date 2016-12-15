@@ -15,17 +15,17 @@ import Social
 /**
 All the real network requests are sent through this object.
 */
-public class TwitterJSON {
+open class TwitterJSON {
     
     /**
     Nuber of results to return.
     */
-    public static var numberOfResults = 20
+    open static var numberOfResults = 20
     
     /**
     Needed to feedback alerts to the user.
     */
-    public static var viewController: UIViewController?
+    open static var viewController: UIViewController?
 
     /**
     Deals with the final request to the API.
@@ -36,21 +36,21 @@ public class TwitterJSON {
     :param: String The API url destination.
     :param: Completion Handler for the request containing an error and or JSON.
     */
-    public class func makeRequest(requestMethod: SLRequestMethod, parameters: [String : String]!, apiURL: String, completion: ((success: Bool, json: JSON) -> Void)) {
+    open class func makeRequest(_ requestMethod: SLRequestMethod, parameters: [String : String]!, apiURL: String, completion: @escaping ((_ success: Bool, _ json: JSON) -> Void)) {
         TwitterJSON.getAccount {(account: ACAccount?) -> Void in
             if let _ = account {
-                let postRequest = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: requestMethod, URL: NSURL(string: apiURL), parameters: parameters)
-                postRequest.account = account
-                postRequest.performRequestWithHandler({ (data: NSData!, urlResponse: NSHTTPURLResponse!, error: NSError!) -> Void in
+                let postRequest = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: requestMethod, url: URL(string: apiURL), parameters: parameters)
+                postRequest?.account = account
+                postRequest?.perform(handler: { (data, urlResponse, error) -> Void in
                     if error == nil {
-                        let json = JSON(data: data)
-                        completion(success: true, json: json)
+                        let json = JSON(data: data!)
+                        completion(true, json)
                     } else {
-                        completion(success: false, json: nil)
+                        completion(false, nil)
                     }
                 })
             } else {
-                completion(success: false, json: nil)
+                completion(false, nil)
             }
         }
     }
@@ -60,33 +60,32 @@ public class TwitterJSON {
     
     :param: completion A closure which contains the first account.
     */
-    private class func getAccount(completionHandler: (account: ACAccount?) -> Void) {
+    fileprivate class func getAccount(_ completionHandler: @escaping (_ account: ACAccount?) -> Void) {
         let accountStore = ACAccountStore()
-        let accountType = accountStore.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierTwitter)
+        let accountType = accountStore.accountType(withAccountTypeIdentifier: ACAccountTypeIdentifierTwitter)
         
-        accountStore.requestAccessToAccountsWithType(accountType, options: nil) { (granted: Bool, error: NSError!) -> Void in
+        accountStore.requestAccessToAccounts(with: accountType, options: nil) { (granted, error) -> Void in
             if granted {
-                let accounts: [ACAccount] = accountStore.accountsWithAccountType(accountType) as! [ACAccount]
+                let accounts: [ACAccount] = accountStore.accounts(with: accountType) as! [ACAccount]
                 if accounts.count == 1 {
-                    completionHandler(account: accounts.first!)
+                    completionHandler(accounts.first!)
                 } else {
-                    let alertController = UIAlertController(title: "Select an account", message: nil, preferredStyle: .Alert)
+                    let alertController = UIAlertController(title: "Select an account", message: nil, preferredStyle: .alert)
                     for account in accounts {
-                        let alertAction = UIAlertAction(title: account.username, style: .Default) { (alertAction: UIAlertAction!) -> Void in
-                            completionHandler(account: account)
-                            println("test")
+                        let alertAction = UIAlertAction(title: account.username, style: .default) { (alertAction: UIAlertAction!) -> Void in
+                            completionHandler(account)
                         }
                         alertController.addAction(alertAction)
                     }
-                    TwitterJSON.viewController?.presentViewController(alertController, animated: true, completion: nil)
+                    TwitterJSON.viewController?.present(alertController, animated: true, completion: nil)
                 }
             } else {
                 let title = "Grant Access To Twitter"
                 let message = "You need to give permission for this application to use your Twitter account. Manage in Settings."
-                let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-                let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                 alertController.addAction(action)
-                TwitterJSON.viewController?.presentViewController(alertController, animated: true, completion: nil)
+                TwitterJSON.viewController?.present(alertController, animated: true, completion: nil)
             }
         }
     }
@@ -98,29 +97,33 @@ public class TwitterJSON {
     :param: Optional Array of TJUser objects.
     :param: Completion Returns the arry of objects passed in with the images loaded.
     */
-    internal class func loadImages(tweets: [TJTweet]?, users: [TJUser]?, completion: (tweets: [TJTweet]?, users: [TJUser]?) -> Void) {
-        var i = 0
+    internal class func loadImages(_ tweets: [TJTweet]?, users: [TJUser]?, completion: @escaping (_ tweets: [TJTweet]?, _ users: [TJUser]?) -> Void) {
+//        var i = 0
         
         if let tweets = tweets {
             for tweet in tweets {
-                Alamofire.request(.GET, tweet.user.profileImageURL).response { (request, response, data, error) in
-                    tweet.user.profileImage = UIImage(data: data!, scale:1)
-                    i++
-                    if i == tweets.count {
-                        completion(tweets: tweets, users: nil)
-                    }
+                Alamofire.request(tweet.user.profileImageURL).responseJSON { response in
+                    
+//                    tweet.user.profileImage = UIImage(data: data!, scale:1)
+//                    i++
+//                    if i == tweets.count {
+//
+//                    }
+                    completion(nil, nil)
                 }
             }
         }
         
         if let users = users {
             for user in users {
-                Alamofire.request(.GET, user.profileImageURL).response { (request, response, data, error) in
-                    user.profileImage = UIImage(data: data!, scale:1)
-                    i++
-                    if i == users.count {
-                        completion(tweets: nil, users: users)
-                    }
+                Alamofire.request(user.profileImageURL).responseJSON { response in
+//                    user.profileImage = UIImage(data: data!, scale:1)
+//                    i++
+//                    if i == users.count {
+//                        
+//                    }
+                    
+                    completion(nil, nil)
                 }
             }
         }
